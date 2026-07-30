@@ -1,0 +1,14 @@
+{
+  "repo": "markerly",
+  "feeds": [
+    {
+      "source": "https://markerly.com",
+      "feed_url": "https://markerly.com/blog/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-07-25T15:00:33Z"
+}
