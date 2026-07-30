@@ -1,7 +1,28 @@
 aid: markerly
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/markerly.png
 name: Markerly
-description: Markerly is a company surfaced as a portfolio company of 500-global and added to the API
-  Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Markerly is a full-service influencer marketing agency, running creator
+  campaigns since 2012 across strategy, vetted-creator sourcing, content,
+  activation, and real-time measurement. Two specialties set the Austin, Texas
+  agency apart: influencer campaigns for government agencies, public health, and
+  nonprofits (advocacy), and bilingual/multicultural creator campaigns. Markerly
+  operates managed campaigns and a creator network rather than a public developer
+  API; it was surfaced as a 500 Global portfolio company and profiled in the API
+  Evangelist network. This enrichment pass confirmed a marketing/agency surface
+  (site, llms.txt, robots.txt) with no public API, OpenAPI, MCP, or developer
+  portal.
 url: https://raw.githubusercontent.com/api-evangelist/markerly/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -11,9 +32,15 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-20'
 tags:
 - Company
+- Influencer Marketing
+- Marketing
+- Creator Economy
+- Advertising
+- Social Media
+- Advocacy
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -23,3 +50,16 @@ maintainers:
 common:
 - type: Website
   url: https://markerly.com
+- type: Blog
+  url: https://markerly.com/news
+- type: Support
+  url: https://markerly.com/contact-us
+- type: LLMsTxt
+  url: llms/markerly-llms.txt
+- type: DomainSecurity
+  url: security/markerly-domain-security.yml
+x-enrichment:
+  date: '2026-07-20'
+  status: enriched
+  artifacts_added: 3
+  pass: local-v1
