@@ -1,19 +1,83 @@
-generated: '2026-07-20'
-method: searched
-source: live HTTP probes of https://markerly.com/.well-known/*
-host: https://markerly.com
-documents:
-- path: /.well-known/security.txt
-  status: 404
-- path: /.well-known/openid-configuration
-  status: 404
-- path: /.well-known/oauth-authorization-server
-  status: 404
-- path: /.well-known/api-catalog
-  status: 404
-- path: /.well-known/ai-plugin.json
-  status: 404
+generated: '2026-08-12'
+method: probed
+source: >-
+  Live HTTP probes of /.well-known/* on every Markerly host — markerly.com,
+  api.markerly.com, markerly.creatorsaurus.com, and the Media Processor base
+  host media-processor-65la52ndha-uc.a.run.app — on 2026-08-12.
+hosts:
+- host: https://markerly.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://api.markerly.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://markerly.creatorsaurus.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+- host: https://media-processor-65la52ndha-uc.a.run.app
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+result: no-hits
+files: []
 notes: >-
-  No /.well-known/ discovery documents are published. The site does publish a
-  real /llms.txt (text/plain) and a /robots.txt that welcomes AI answer engines
-  and disallows /api/ (no public API surface).
+  Every /.well-known/ path returned 404 on every host, so NO WellKnown,
+  SecurityTxt, or AgentCard pointer is emitted — this file records a measured
+  absence, not a published surface. The 404s are genuine: markerly.com returns a
+  993-byte error page with a real 404 status, and the Cloud Run host returns its
+  own JSON 404 body ({"error":"Not found"}), so neither is a soft-200 SPA
+  catch-all.
+
+  Markerly does publish two root-level agent-facing documents on the marketing
+  host, and both are real text/plain files rather than HTML shells:
+  - /llms.txt (200, text/plain, 3,870 bytes) — captured verbatim at
+    llms/markerly-llms.txt; byte-identical to the live file as of this pass.
+  - /robots.txt (200, text/plain) — explicitly welcomes AI answer engines
+    ("AI answer engines are welcome to crawl and cite our public content"),
+    allows /, and disallows /internal, /p/, /api/, /redirect, and the
+    /pulse/wp-admin WordPress paths.
+  Neither lives under /.well-known/, so neither satisfies the well-known
+  catalog check.

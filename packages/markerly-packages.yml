@@ -1,0 +1,78 @@
+generated: '2026-08-12'
+method: searched
+source: >-
+  Unauthenticated registry lookups on 2026-08-12 against registry.npmjs.org,
+  pypi.org, rubygems.org, crates.io, repo.packagist.org, plus a full enumeration
+  of the https://github.com/Markerly organization.
+package_count: 0
+official_sdk_count: 0
+notes: >-
+  Markerly publishes no client libraries. Every registry below was queried
+  directly and returned a miss, and the company's public GitHub organization
+  contains no SDK — only two service/internal repositories. No SDKs pointer is
+  emitted, because there is no SDK.
+
+packages: []
+
+registries_checked:
+- registry: npm
+  query: markerly
+  endpoint: https://registry.npmjs.org/markerly
+  status: 404
+  search_results: 0
+  version: null
+- registry: pypi
+  query: markerly
+  endpoint: https://pypi.org/pypi/markerly/json
+  status: 404
+  version: null
+- registry: rubygems
+  query: markerly
+  endpoint: https://rubygems.org/api/v1/gems/markerly.json
+  status: 404
+  version: null
+- registry: crates.io
+  query: markerly
+  endpoint: https://crates.io/api/v1/crates/markerly
+  status: 403
+  version: null
+  note: crates.io refused the unauthenticated user agent; no Markerly crate is known to exist.
+- registry: packagist
+  query: markerly/markerly
+  endpoint: https://repo.packagist.org/packages/markerly/markerly.json
+  status: 404
+  version: null
+- registry: maven-central
+  checked: false
+  note: Skipped — Markerly ships no JVM software and publishes no Java surface.
+- registry: nuget
+  checked: false
+  note: Skipped — no .NET surface.
+
+first_party_repositories:
+- name: media-processor-microservice
+  url: https://github.com/Markerly/media-processor-microservice
+  language: JavaScript
+  role: deployed service, not a client library
+  official: true
+  published_to_registry: false
+  version: 1.0.0
+  version_source: package.json (repository only — never published to npm)
+  published: null
+  last_push: '2026-08-11'
+  license: MIT
+  note: >-
+    package.json declares name "media-processor-microservice" version 1.0.0 with
+    author "Markerly", but the package has never been published to npm, so there
+    is no registry release date to record.
+- name: web-crawl
+  url: https://github.com/Markerly/web-crawl
+  language: PHP
+  role: internal Laravel social-harvesting package
+  official: true
+  published_to_registry: false
+  version: null
+  version_source: composer.json declares no version and the package is absent from Packagist.
+  published: null
+  last_push: '2022-11-23'
+  note: Dormant since November 2022.

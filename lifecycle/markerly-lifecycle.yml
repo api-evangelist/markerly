@@ -1,0 +1,79 @@
+generated: '2026-08-12'
+method: probed
+source: >-
+  Probes of markerly.com, status.markerly.com, trust.markerly.com, and
+  https://media-processor-65la52ndha-uc.a.run.app on 2026-08-12, plus the
+  GitHub metadata for https://github.com/Markerly/media-processor-microservice.
+api: markerly:media-processor
+notes: >-
+  Markerly publishes no versioning policy, no deprecation policy, no SLA, and no
+  status page. The only lifecycle signal the company emits is the commit history
+  of the one public repository behind its callable service. No StatusPage and no
+  Deprecation pointer are emitted, because neither exists.
+
+versioning:
+  policy_published: false
+  scheme: informational semver only
+  current_version: 1.0.0
+  selectable_by_caller: false
+  detail: >-
+    "1.0.0" appears in the GET / discovery body and in package.json. There is no
+    version path segment, no version header, and no way for a caller to pin a
+    version.
+
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  detail: >-
+    No RFC 8594 Sunset or Deprecation headers were observed, and no deprecation
+    policy page exists.
+
+status_page:
+  published: false
+  probes:
+  - url: https://status.markerly.com/
+    status: 000
+    note: DNS does not resolve.
+  - url: https://markerly.com/status
+    status: 404
+  health_endpoint:
+    url: https://media-processor-65la52ndha-uc.a.run.app/health
+    status: 200
+    body: '{"status":"healthy","timestamp":"2026-08-12T19:08:41.905Z"}'
+    note: >-
+      A liveness endpoint is not a status page — it reports the instance that
+      answered, carries no incident history, and has no subscriber channel.
+
+sla:
+  published: false
+
+support:
+  channel: https://markerly.com/contact-us
+  phone: '+1 833 627 5375'
+  issues: https://github.com/Markerly/media-processor-microservice/issues
+
+maintenance_signal:
+  repository: https://github.com/Markerly/media-processor-microservice
+  created: '2025-11-10'
+  last_push: '2026-08-11'
+  archived: false
+  license: MIT (declared in package.json and README; no LICENSE file in the repo)
+  assessment: >-
+    Actively maintained — the service was pushed one day before this pass. The
+    repository README still carries a TODO list describing the FFmpeg routes as
+    unimplemented, which is stale: thumbnail generation ships and is live in
+    production.
+
+other_repositories:
+- name: web-crawl
+  url: https://github.com/Markerly/web-crawl
+  language: PHP
+  last_push: '2022-11-23'
+  archived: false
+  assessment: >-
+    Dormant for over three years. A Laravel package with Account/Post/Media
+    models and a scraper provider — internal social-harvesting tooling, not a
+    client SDK, and not published to Packagist.

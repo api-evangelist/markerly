@@ -1,0 +1,125 @@
+generated: '2026-08-12'
+method: derived
+source: >-
+  Derived from Markerly's own published source for the Media Processor
+  microservice — https://github.com/Markerly/media-processor-microservice
+  (src/index.js, src/routes/thumbnail.js, src/middleware/rateLimiter.js, and
+  RATE_LIMITING.md) — plus the live 200 responses observed on
+  https://media-processor-65la52ndha-uc.a.run.app on 2026-08-12.
+api: markerly:media-processor
+format: custom-json
+rfc9457: false
+notes: >-
+  Markerly publishes no OpenAPI and no error reference page. This catalog is
+  derived from the first-party source code the company publishes openly, so the
+  codes and messages are the literal strings the deployed service returns rather
+  than an interpretation. The envelope is a flat JSON object; it is NOT
+  application/problem+json and carries no type URI, no machine-readable error
+  code, and no correlation/request id.
+
+envelope:
+  content_type: application/json
+  fields:
+  - name: error
+    type: string
+    required: true
+    description: Short human-readable category, e.g. "Bad Request".
+  - name: message
+    type: string
+    required: false
+    description: Human-readable explanation of what went wrong.
+  - name: retryAfter
+    type: string
+    required: false
+    description: Present only on 429; a human-readable duration, e.g. "15 minutes".
+  missing:
+  - a stable machine-readable error code or slug
+  - a type URI (RFC 9457 "type")
+  - a request/correlation id for support triage
+
+errors:
+- status: 400
+  error: Bad Request
+  message: videoUrl is required
+  operation: POST /generate-thumbnail
+  cause: The JSON request body omitted the required videoUrl field.
+  remediation: Send a JSON body containing videoUrl.
+- status: 400
+  error: Bad Request
+  message: Only Google Cloud Storage URLs are supported
+  operation: POST /generate-thumbnail
+  cause: >-
+    videoUrl did not contain storage.googleapis.com or
+    storage.cloud.google.com. The service deliberately refuses arbitrary remote
+    URLs, which also serves as its SSRF control.
+  remediation: Supply a Google Cloud Storage object URL.
+- status: 400
+  error: Bad Request
+  message: >-
+    URL must point to a valid video file (.mp4, .mov, .avi, .mkv, .webm, .flv,
+    .m4v, .mpeg, .mpg)
+  operation: POST /generate-thumbnail
+  cause: videoUrl did not contain one of the allowed video file extensions.
+  remediation: Point videoUrl at a video object with a supported extension.
+- status: 404
+  error: Not found
+  operation: any unmatched route
+  cause: No route matched the request path.
+  remediation: Use GET /, GET /health, or POST /generate-thumbnail.
+  observed: true
+  evidence:
+    url: https://media-processor-65la52ndha-uc.a.run.app/openapi.json
+    http_status: 404
+- status: 429
+  error: Too many requests
+  message: >-
+    You have exceeded the rate limit of 100 requests per 15 minutes. Please try
+    again later.
+  operation: any rate-limited route
+  cause: More than 100 requests from one IP in the 15-minute window.
+  remediation: Back off and retry after the window resets; see ratelimit-reset.
+  see_also: rate-limits/markerly-rate-limits.yml
+- status: 429
+  error: Too many thumbnail requests
+  message: >-
+    You have exceeded the rate limit of 100 requests per 15 minutes. Please try
+    again later.
+  operation: POST /generate-thumbnail
+  cause: Per-IP thumbnail quota exhausted.
+  remediation: Back off and retry after the window resets.
+- status: 500
+  error: Thumbnail generation failed
+  message: <underlying FFmpeg or fetch error message>
+  operation: POST /generate-thumbnail
+  cause: >-
+    FFmpeg failed, the source object could not be read, or the rendered
+    thumbnail file was empty.
+  remediation: Verify the source object is readable and is a decodable video.
+  note: >-
+    The raw underlying exception message is passed through to the client, which
+    can leak internal paths or infrastructure detail.
+- status: 500
+  error: Failed to send thumbnail
+  message: <file transmission error message>
+  operation: POST /generate-thumbnail
+  cause: The generated JPEG could not be streamed to the client.
+  remediation: Retry the request.
+- status: 500
+  error: Internal server error
+  operation: any
+  cause: Unhandled exception caught by the Express error middleware.
+  remediation: Retry; if persistent, contact Markerly.
+
+success_shapes:
+- operation: GET /health
+  status: 200
+  content_type: application/json
+  body: '{"status":"healthy","timestamp":"<ISO 8601>"}'
+- operation: GET /
+  status: 200
+  content_type: application/json
+  body: service/version/description/endpoints discovery document
+- operation: POST /generate-thumbnail
+  status: 200
+  content_type: image/jpeg
+  body: the rendered thumbnail image, not JSON

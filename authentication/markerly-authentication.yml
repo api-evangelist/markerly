@@ -1,0 +1,94 @@
+generated: '2026-08-12'
+method: probed
+source: >-
+  Live probes of https://media-processor-65la52ndha-uc.a.run.app,
+  https://api.markerly.com/, and https://markerly.creatorsaurus.com/ on
+  2026-08-12, plus Markerly's published source at
+  https://github.com/Markerly/media-processor-microservice.
+notes: >-
+  Markerly issues no API keys and publishes no developer authentication
+  documentation. There are three distinct authentication postures across its
+  surfaces, and only one of them belongs to a callable API.
+
+surfaces:
+
+- name: Media Processor microservice
+  api: markerly:media-processor
+  base_url: https://media-processor-65la52ndha-uc.a.run.app
+  authenticated: false
+  scheme: none
+  evidence:
+    url: https://media-processor-65la52ndha-uc.a.run.app/
+    http_status: 200
+    note: >-
+      Returned its full service-discovery document to an anonymous request with
+      no credential of any kind. GET /health likewise returns 200 anonymously.
+  controls_in_place:
+  - Per-IP rate limiting (100 requests / 15 minutes) as the only abuse control.
+  - >-
+      Input allow-listing: POST /generate-thumbnail refuses any videoUrl that is
+      not a Google Cloud Storage URL with a video file extension, which bounds
+      the SSRF surface in the absence of authentication.
+  - helmet security headers and HSTS (max-age 15552000; includeSubDomains).
+  concerns:
+  - >-
+      CORS is wide open (access-control-allow-origin: *) on an unauthenticated
+      endpoint that performs resource-intensive FFmpeg work, so any origin can
+      drive it from a browser.
+  - >-
+      The source comments describe this as an "internal microservice", but it is
+      reachable from the public internet without credentials. If it is meant to
+      be internal, Cloud Run IAM or an ingress restriction — not just a rate
+      limiter — is the missing control.
+
+- name: Creator social-connect app
+  host: https://api.markerly.com
+  authenticated: true
+  audience: creators (Markerly's influencer network), not developers
+  schemes:
+  - type: form-login
+    detail: Email + password POST to /login with a Laravel CSRF token.
+  - type: oauth2
+    provider: Facebook / Meta
+    detail: >-
+      Facebook JS SDK login (Graph API v25.0) requesting scopes public_profile,
+      email, instagram_basic, instagram_manage_insights, pages_read_engagement,
+      pages_show_list — i.e. creators grant Markerly read access to their
+      Instagram insights and Facebook Page engagement.
+    posted_to: https://api.markerly.com/facebook/login
+  - type: oauth2
+    provider: TikTok
+    posted_to: https://api.markerly.com/tiktok/login
+  password_reset: https://api.markerly.com/password/reset
+  evidence:
+    url: https://api.markerly.com/
+    http_status: 200
+  note: >-
+    Despite the api.* hostname this is a Laravel web application serving an HTML
+    login page, not a machine API. No OpenAPI, no token endpoint, and no
+    /.well-known/oauth-authorization-server (probed, 404).
+
+- name: Creator / client platform portal
+  host: https://markerly.creatorsaurus.com
+  authenticated: true
+  scheme: form-login (JavaScript-rendered single-page application)
+  sign_up: https://markerly.creatorsaurus.com/register
+  sign_in: https://markerly.creatorsaurus.com/login
+  evidence:
+    url: https://markerly.creatorsaurus.com/login
+    http_status: 200
+  note: >-
+    Markerly's platform is served from the creatorsaurus.com domain under a
+    markerly.* tenant subdomain; the apex creatorsaurus.com itself returns a
+    page titled "Markerly". The portal is a Vue SPA whose served HTML is an
+    empty shell, so nothing behind it is machine-readable.
+
+well_known:
+  oauth_authorization_server: 404 on markerly.com, api.markerly.com, and the Cloud Run host
+  openid_configuration: 404 on markerly.com, api.markerly.com, and the Cloud Run host
+  oauth_protected_resource: 404 on api.markerly.com
+
+oauth_scopes_artifact: >-
+  Not applicable. Markerly is an OAuth *client* of Meta and TikTok, not an OAuth
+  provider — it publishes no authorization server and no scope reference, so
+  scopes/ is intentionally absent rather than empty.

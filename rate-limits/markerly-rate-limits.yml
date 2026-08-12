@@ -1,0 +1,98 @@
+generated: '2026-08-12'
+method: probed
+source: >-
+  Live unauthenticated response headers observed on
+  https://media-processor-65la52ndha-uc.a.run.app/ (2026-08-12), reconciled
+  against Markerly's own published rate-limiting documentation at
+  https://github.com/Markerly/media-processor-microservice/blob/main/RATE_LIMITING.md
+  and the middleware source at src/middleware/rateLimiter.js.
+docs: https://github.com/Markerly/media-processor-microservice/blob/main/RATE_LIMITING.md
+api: markerly:media-processor
+limit_count: 2
+notes: >-
+  Markerly's only publicly reachable HTTP service is the Media Processor
+  microservice on Google Cloud Run. It is unauthenticated, so limits are keyed
+  by client IP address and held in process memory (they reset when the Cloud Run
+  instance restarts or scales). The agency's marketing site (markerly.com), the
+  creator portal (markerly.creatorsaurus.com), and the social-connect app
+  (api.markerly.com) publish no rate limits.
+
+limits:
+- scope: per-ip
+  applies_to: All endpoints except GET /health
+  window: 15m
+  window_seconds: 900
+  limit: 100
+  burst: null
+  identifier: client IP address (X-Forwarded-For, trust proxy enabled)
+  storage: in-memory (express-rate-limit default store; not shared across instances)
+  observed: true
+  evidence:
+    url: https://media-processor-65la52ndha-uc.a.run.app/
+    http_status: 200
+    headers:
+      ratelimit-policy: 100;w=900
+      ratelimit-limit: '100'
+      ratelimit-remaining: '99'
+      ratelimit-reset: '900'
+- scope: per-ip
+  applies_to: POST /generate-thumbnail
+  window: 15m
+  window_seconds: 900
+  limit: 100
+  burst: null
+  identifier: client IP address
+  storage: in-memory
+  observed: false
+  note: >-
+    DOCUMENTATION DRIFT — RATE_LIMITING.md states 50 requests per 15 minutes for
+    thumbnail generation, but the deployed middleware
+    (src/middleware/rateLimiter.js, thumbnailLimiter) sets max: 100 with the
+    comment "increased to handle reports with 50+ posts". The code is the
+    operative value; the published doc is stale. Not observed directly because
+    exercising it would mean deliberately exhausting a live production limit.
+
+headers:
+  standard: true
+  style: RFC draft "RateLimit" fields (express-rate-limit standardHeaders)
+  legacy_x_headers: false
+  returned:
+  - name: ratelimit-policy
+    example: 100;w=900
+    meaning: quota and window, in seconds
+  - name: ratelimit-limit
+    example: '100'
+    meaning: maximum requests permitted in the current window
+  - name: ratelimit-remaining
+    example: '99'
+    meaning: requests left in the current window
+  - name: ratelimit-reset
+    example: '900'
+    meaning: seconds until the window resets
+  retry_after: false
+  note: >-
+    X-RateLimit-* legacy headers are explicitly disabled (legacyHeaders: false).
+    No Retry-After header is sent; the retry hint is carried in the JSON body as
+    a human-readable "retryAfter" string rather than as a header.
+
+exhaustion:
+  status: 429
+  content_type: application/json
+  body_shape:
+    error: string
+    message: string
+    retryAfter: string (human readable, e.g. "15 minutes")
+  example:
+    error: Too many requests
+    message: You have exceeded the rate limit of 100 requests per 15 minutes. Please try again later.
+    retryAfter: 15 minutes
+
+exemptions:
+- path: /health
+  reason: Health checks are skipped so monitoring does not consume quota.
+
+unused_policies:
+- name: strictLimiter
+  window: 1h
+  limit: 20
+  status: defined in src/middleware/rateLimiter.js but not currently bound to any route

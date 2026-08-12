@@ -1,0 +1,37 @@
+generated: '2026-08-12'
+method: searched
+source: >-
+  Probed https://markerly.com/pricing (404) and walked the full published
+  sitemap at https://markerly.com/sitemap.xml on 2026-08-12; also read
+  https://markerly.com/msa (Master Services Agreement) for the fee structure.
+plan_count: 0
+currency: USD
+notes: >-
+  Markerly publishes no pricing page and no plans. The sitemap lists 23 URLs and
+  none of them is a pricing, plans, or packages page; /pricing returns 404. Every
+  commercial path on the site funnels to https://markerly.com/contact-us or the
+  phone number +1 833 627 5375. This is a contact-sales agency engagement, not a
+  self-serve product with tiers, and there is no metered or per-call pricing for
+  the one callable service the company operates — the Media Processor
+  microservice is an internal component, not a sold API.
+
+plans: []
+
+evidence:
+- url: https://markerly.com/pricing
+  status: 404
+- url: https://markerly.com/sitemap.xml
+  status: 200
+  note: 23 URLs, no pricing or plans page among them.
+- url: https://markerly.com/msa
+  status: 200
+  note: >-
+    The Master Services Agreement has a "Fees and Billing" section, but fees are
+    defined per-order-form rather than published — the standard shape for
+    negotiated agency retainers.
+
+third_party_note: >-
+  Third-party review sites describe Markerly's API access for external
+  integrations as bundled into a white-label SaaS tier rather than sold
+  standalone. That is a secondary source, not a Markerly publication, so no
+  tier, price, or quota is recorded here.

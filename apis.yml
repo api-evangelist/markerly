@@ -1,15 +1,17 @@
 aid: markerly
 accessModel:
-  pricing: unknown
-  onboarding: unknown
+  pricing: contact
+  onboarding: contact
   trial: false
   try_now: false
   public: false
-  label: Unknown
-  confidence: low
-  source: []
-  generated: '2026-07-22'
-  method: derived
+  label: Contact Sales
+  confidence: medium
+  source:
+  - https://markerly.com/contact-us
+  - https://markerly.com/pricing
+  generated: '2026-08-12'
+  method: probed
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/markerly.png
 name: Markerly
 description: >-
@@ -18,11 +20,16 @@ description: >-
   activation, and real-time measurement. Two specialties set the Austin, Texas
   agency apart: influencer campaigns for government agencies, public health, and
   nonprofits (advocacy), and bilingual/multicultural creator campaigns. Markerly
-  operates managed campaigns and a creator network rather than a public developer
-  API; it was surfaced as a 500 Global portfolio company and profiled in the API
-  Evangelist network. This enrichment pass confirmed a marketing/agency surface
-  (site, llms.txt, robots.txt) with no public API, OpenAPI, MCP, or developer
-  portal.
+  runs its creator network and client reporting on its own platform — a creator
+  portal at markerly.creatorsaurus.com and a social-account connect app at
+  api.markerly.com that links Instagram, Facebook Pages, and TikTok accounts —
+  and it operates one publicly reachable first-party HTTP service, the Media
+  Processor microservice on Google Cloud Run, whose source, endpoints, rate
+  limits, and error envelope are published openly in the company's own GitHub
+  organization. Markerly publishes no OpenAPI, no developer portal, and no
+  self-serve API program; per third-party reviews, API access for external
+  integrations is bundled into its white-label platform tier rather than sold
+  as a standalone product.
 url: https://raw.githubusercontent.com/api-evangelist/markerly/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -32,7 +39,7 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-20'
+modified: '2026-08-12'
 tags:
 - Company
 - Influencer Marketing
@@ -41,7 +48,36 @@ tags:
 - Advertising
 - Social Media
 - Advocacy
-apis: []
+- Media Processing
+- Public Sector
+apis:
+- aid: markerly:media-processor
+  name: Markerly Media Processor
+  description: >-
+    A first-party FFmpeg media-processing microservice Markerly runs on Google
+    Cloud Run. It exposes two documented JSON/HTTP operations — a health check
+    and a thumbnail generator that renders a JPEG frame from a Google Cloud
+    Storage video URL — plus a self-describing root endpoint that lists them.
+    The service is unauthenticated and publicly reachable, sends standard
+    RateLimit-* response headers, and its full source, rate-limiting policy, and
+    error envelope are published in Markerly's own public GitHub organization.
+    It is operated as an internal component of Markerly's campaign-reporting
+    pipeline (the source comments describe it as an internal microservice), not
+    marketed as a developer product, and Markerly publishes no OpenAPI for it.
+  humanURL: https://github.com/Markerly/media-processor-microservice
+  baseURL: https://media-processor-65la52ndha-uc.a.run.app
+  tags:
+  - Media Processing
+  - Video
+  - Thumbnails
+  - Microservice
+  properties:
+  - type: SourceCode
+    url: https://github.com/Markerly/media-processor-microservice
+  - type: Documentation
+    url: https://github.com/Markerly/media-processor-microservice/blob/main/README.md
+  - type: RateLimits
+    url: rate-limits/markerly-rate-limits.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -58,8 +94,32 @@ common:
   url: llms/markerly-llms.txt
 - type: DomainSecurity
   url: security/markerly-domain-security.yml
+- type: GitHubOrganization
+  url: https://github.com/Markerly
+- type: TermsOfService
+  url: https://markerly.com/msa
+- type: PrivacyPolicy
+  url: https://markerly.com/tos
+- type: SignUp
+  url: https://markerly.creatorsaurus.com/register
+- type: Login
+  url: https://markerly.creatorsaurus.com/login
+- type: RateLimits
+  url: rate-limits/markerly-rate-limits.yml
+- type: ErrorCatalog
+  url: errors/markerly-error-codes.yml
+- type: Authentication
+  url: authentication/markerly-authentication.yml
+- type: Conventions
+  url: conventions/markerly-conventions.yml
+- type: Conformance
+  url: conformance/markerly-conformance.yml
+- type: Lifecycle
+  url: lifecycle/markerly-lifecycle.yml
+- type: Plans
+  url: plans/markerly-plans-pricing.yml
 x-enrichment:
-  date: '2026-07-20'
+  date: '2026-08-12'
   status: enriched
-  artifacts_added: 3
+  artifacts_added: 8
   pass: local-v1

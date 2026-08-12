@@ -1,0 +1,106 @@
+generated: '2026-08-12'
+method: derived
+source: >-
+  Derived from live response headers and bodies observed on
+  https://media-processor-65la52ndha-uc.a.run.app (2026-08-12) and from
+  Markerly's published source at
+  https://github.com/Markerly/media-processor-microservice.
+api: markerly:media-processor
+notes: >-
+  Markerly publishes no API design guide, style guide, or conventions page.
+  Everything below is read off the one callable surface the company operates.
+  Several rows are honest negatives: recording that a convention is absent is
+  the finding.
+
+authentication:
+  style: none
+  detail: The service is unauthenticated; see authentication/markerly-authentication.yml.
+
+idempotency:
+  supported: false
+  header: null
+  detail: >-
+    No Idempotency-Key header is read or documented. POST /generate-thumbnail is
+    naturally idempotent in effect — the same videoUrl, timePosition, size, and
+    quality render the same JPEG and nothing is persisted server-side — but the
+    service offers no idempotency key, no replay window, and no deduplication
+    guarantee, so a retried request simply repeats the FFmpeg work and consumes
+    quota again. No Idempotency pointer is emitted for this provider.
+
+pagination:
+  supported: false
+  detail: No collection endpoints exist, so there is nothing to paginate.
+
+filtering_and_expansion:
+  supported: false
+
+versioning:
+  style: none
+  in_url: false
+  header: null
+  detail: >-
+    No version segment in the path and no version header. A version string
+    ("1.0.0") is reported in the GET / discovery body and in package.json, but it
+    is informational only and is not selectable by the caller.
+  see_also: lifecycle/markerly-lifecycle.yml
+
+request_tracing:
+  provider_request_id: false
+  detail: >-
+    No request id is echoed in the response body or in a first-party header.
+    Google Cloud Run injects x-cloud-trace-context on every response, which is
+    the only correlation handle a caller has, and it is platform-supplied rather
+    than an API contract.
+  observed_header: x-cloud-trace-context
+
+error_envelope:
+  content_type: application/json
+  shape: flat object with "error" and optional "message" / "retryAfter"
+  rfc9457: false
+  machine_readable_code: false
+  see_also: errors/markerly-error-codes.yml
+
+rate_limit_signaling:
+  supported: true
+  style: RFC draft RateLimit fields (ratelimit-policy, ratelimit-limit, ratelimit-remaining, ratelimit-reset)
+  legacy_x_headers: false
+  retry_after_header: false
+  see_also: rate-limits/markerly-rate-limits.yml
+
+content_negotiation:
+  request: application/json (body limit 50mb)
+  response: >-
+    application/json for discovery, health, and all errors; image/jpeg for a
+    successful thumbnail. A caller must branch on Content-Type because the
+    success and failure bodies of the same operation are different media types.
+  compression: gzip/deflate via the compression middleware
+  cors:
+    enabled: true
+    allow_origin: '*'
+
+metadata:
+  supported: false
+
+webhooks_or_events:
+  supported: false
+  detail: No callbacks, webhooks, or event stream are published.
+
+operations:
+- method: GET
+  path: /
+  summary: Service discovery — returns name, version, description, and endpoint map.
+  auth: none
+  rate_limited: true
+- method: GET
+  path: /health
+  summary: Liveness check.
+  auth: none
+  rate_limited: false
+- method: POST
+  path: /generate-thumbnail
+  summary: >-
+    Render a JPEG thumbnail from a Google Cloud Storage video URL. Body:
+    videoUrl (required), timePosition, size, quality (all optional). Returns
+    image/jpeg on success.
+  auth: none
+  rate_limited: true
