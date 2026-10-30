@@ -64,6 +64,102 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Markerly is a company surfaced as a portfolio company of 500-global and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+Markerly is a full-service influencer marketing agency, running creator campaigns since 2012 across strategy, vetted-creator sourcing, content, activation, and real-time measurement. Two specialties set the Austin, Texas agency apart: influencer campaigns for government agencies, public health, and nonprofits (advocacy), and bilingual/multicultural creator campaigns. Markerly runs its creator network and client reporting on its own platform — a creator portal at markerly.creatorsaurus.com and a social-account connect app at api.markerly.com that links Instagram, Facebook Pages, and TikTok accounts — and it operates one publicly reachable first-party HTTP service, the Media Processor microservice on Google Cloud Run, whose source, endpoints, rate limits, and error envelope are published openly in the company's own GitHub organization. Markerly publishes no OpenAPI, no developer portal, and no self-serve API program; per third-party reviews, API access for external integrations is bundled into its white-label platform tier rather than sold as a standalone product.
 
-Backed by: 500-global — https://markerly.com
+**Areas:** Company · Influencer Marketing · Marketing · Creator Economy · Advertising · Social Media · Advocacy · Media Processing · Public Sector
+
+## Markerly on APIs.io
+
+Everything profiled for Markerly is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/markerly/](https://apis.io/providers/markerly/)** — or go straight to one of the APIs or properties below.
+
+### APIs (1)
+
+- [Markerly Media Processor](https://apis.io/apis/markerly/media-processor/) — A first-party FFmpeg media-processing microservice Markerly runs on Google Cloud Run. It exposes two documented JSON/HTTP operations — a health check and a…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Markerly Authentication](https://apis.io/security/markerly/markerly-authentication/)
+- [Markerly Domain Security](https://apis.io/security/markerly/markerly-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Markerly Plans Pricing](https://apis.io/plans/markerly/markerly-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Markerly Rate Limits](https://apis.io/rate-limits/markerly/markerly-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://markerly.com)
+- [Sign up](https://markerly.creatorsaurus.com/register)
+- [Support](https://markerly.com/contact-us)
+- [Blog](https://markerly.com/news)
+- [Terms of service](https://markerly.com/msa)
+- [Privacy policy](https://markerly.com/tos)
+- [GitHub](https://github.com/Markerly)
+
+## API Evangelist rating
+
+**Kin Score 25.5** — emerging · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 0.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 23.7 |
+| Developer ergonomics | 28.6 |
+| Access clarity | 27.6 |
+
+**Agent readiness 5.8** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 24.5** — Government & Public Sector
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/markerly/](https://apis.io/providers/markerly/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Markerly: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/markerly/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
